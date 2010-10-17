@@ -1,0 +1,11 @@
+webpconv: WebP (A converstion tool for WebP image format)
+webpconv:
+webpconv: WebP is an image format that does lossy compression of digital
+webpconv: photographic images.  WebP consists of a codec based on VP8, that
+webpconv: Google open-sourced in May 2010 and a container based on RIFF.
+webpconv: Webmasters, web developers and browser developers can use WebP to
+webpconv: compress, archive and distribute digital images more efficiently.
+webpconv:
+webpconv:
+webpconv:
+webpconv: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
