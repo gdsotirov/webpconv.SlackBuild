@@ -1,15 +1,30 @@
 #!/bin/sh
 #
 # Slackware build script for webpconv
-# Written by Georgi D. Sotirov <gdsotirov@dir.bg>
-# Visit SlackPack at http://sotirov-bg.net/slackpack/
+# Copyright (C) 2010-2016 Georgi D. Sotirov <gdsotirov@dir.bg>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# 
+# $Id: webpconv.SlackBuild,v 1.2 2016/08/11 12:09:31 gsotirov Exp $
 #
 
-. ../slack-package.conf
+. ../../slack-package.conf
 
 NAME=webp
 PNAME=webpconv
-VERSION=0.0.1
+VERSION=0.0.5
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 
@@ -20,7 +35,7 @@ if [ ! -e $TMP ]; then
   mkdir -p $TMP # location to build the source
 fi
 
-SRC=$TMP/$NAME/libwebp
+SRC=$TMP/$NAME
 if [ -e $SRC -a -d $SRC ]; then
   echo "Source directory '$SRC' already exists! Plaese, move it or remove it."
   exit 1
@@ -35,25 +50,25 @@ mkdir -p $PKG
 
 # Extract the sources
 cd $TMP
-tar -xvf $CWD/$NAME-leptonica-$VERSION.tar.gz || exit 1
+tar -xvf $CWD/$NAME-leptonica-$VERSION.tar.gz || exit 3
 cd $SRC
 fix_source
 
 # Apply patches
-patch -p1 -b -z.orig < $CWD/$PNAME-$VERSION.diff
+patch -p1 -b -z.orig < $CWD/$PNAME-$VERSION.diff || exit 4
 
 # Build & install
-make \
-  IMAGELIB_INCL=/usr/include/liblept \
-  LIB_SHARED_DIR=/usr/lib \
-  SHARED=1 \
-  OPTIONS="$SLKCFLAGS" || exit 2
-make DESTDIR=$PKG prefix=/usr install || exit 3
+cd $SRC/libwebp
+CFLAGS=$SLKCFLAGS \
+CPPFLAGS=$SLKCFLAGS \
+./configure --host=$ARCH-pc-linux-gnu \
+            --build=$ARCH-pc-linux-gnu \
+            --prefix=/usr || exit 5
+make DESTDIR=$PKG install || exit 3
 
 bin_perms $PKG
 ( cd $PKG; strip_bin )
-DOCFILES="$DOCFILES PATENTS"
-( cd $SRC; create_docs $PKG $PNAME-$VERSION )
+( cd $SRC/libwebp; create_docs $PKG $PNAME-$VERSION )
 ( cd $PKG/usr/doc/$PNAME-$VERSION
   mv LICENSE COPYING )
 
