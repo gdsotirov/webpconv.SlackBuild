@@ -1,0 +1,42 @@
+# Patch to use dynamic libwebp
+# Copyright (C) 2016 Georgi D. Sotirov <gdsotirov@dir.bg>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# 
+# $Id: webpconv-0.0.5.diff,v 1.1 2016/08/11 12:08:47 gsotirov Exp $
+#
+diff -urNad webp-orig/libwebp/src/Makefile.in webp/libwebp/src/Makefile.in
+--- webp-orig/libwebp/src/Makefile.in	2010-11-22 08:04:05.000000000 +0200
++++ webp/libwebp/src/Makefile.in	2016-08-11 14:27:00.000000000 +0300
+@@ -46,7 +46,7 @@
+ CONFIG_CLEAN_VPATH_FILES =
+ am__installdirs = "$(DESTDIR)$(bindir)"
+ PROGRAMS = $(bin_PROGRAMS)
+-am_webpconv_OBJECTS = webpimg.$(OBJEXT) webpconv.$(OBJEXT)
++am_webpconv_OBJECTS = webpconv.$(OBJEXT)
+ webpconv_OBJECTS = $(am_webpconv_OBJECTS)
+ am__DEPENDENCIES_1 =
+ webpconv_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+@@ -168,8 +168,8 @@
+ VPX_LIBS = -lvpx -lpthread
+ INCLUDES = -I${includedir}/liblept
+ AM_CPPFLAGS = $(INCLUDES)
+-webpconv_SOURCES = webpimg.c webpconv.c
+-webpconv_LDADD = $(LEPTONICA_LIBS) $(VPX_LIBS)
++webpconv_SOURCES = webpconv.c
++webpconv_LDADD = -lwebp $(LEPTONICA_LIBS) $(VPX_LIBS)
+ all: all-am
+ 
+ .SUFFIXES:
